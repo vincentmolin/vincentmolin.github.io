@@ -4,8 +4,8 @@
 AUTHOR = 'Vincent Molin'
 SITENAME = 'TODO: Come up with an original title'
 SITEURL = ''
-
 PATH = 'content'
+THEME = 'themes/attila'
 
 TIMEZONE = 'Europe/Paris'
 
