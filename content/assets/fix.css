@@ -1,0 +1,9 @@
+.input_prompt 
+{
+  display: none;
+}
+.output_subarea.output_stream.output_stdout.output_text > pre
+{
+  margin-top: 1em;
+  background: #fff8ed;
+}

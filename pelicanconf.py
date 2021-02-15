@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = 'Vincent Molin'
-SITENAME = 'TODO: Come up with an original title'
+SITENAME = 'Pendulum of Isak'
 SITEURL = ''
+
 PATH = 'content'
-THEME = 'themes/attila'
+STATIC_PATHS = ['assets']
 
+# Localization
 TIMEZONE = 'Europe/Paris'
-
 DEFAULT_LANG = 'en'
+LOCALE = 'usa'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -30,5 +32,32 @@ SOCIAL = (('You can add links in your config file', '#'),
 
 DEFAULT_PAGINATION = False
 
-# Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+# Enabled plugins
+# .ipynb support
+MARKUP = ("md", "ipynb")
+
+from pelican_jupyter import markup as nb_markup
+PLUGINS = [nb_markup]
+IPYNB_SKIP_CSS=True
+#IPYNB_FIX_CSS =True
+
+
+
+# Attila setting
+THEME = 'themes/attila'
+HOME_COLOR = 'black'
+AUTHORS_BIO = {
+  "zutrinken": {
+    "name": "Zutrinken",
+    "cover": "https://casper.ghost.org/v1.0.0/images/team.jpg",
+    "image": "assets/images/avatar.png",
+    "website": "http://blog.arulraj.net",
+    "linkedin": "unavailable",
+    "github": "arulrajnet",
+    "location": "Chennai",
+    "bio": "This is the place for a small biography with max 200 characters. Well, now 100 are left. Cool, hugh?"
+  }
+}
+
+COLOR_SCHEME_CSS = 'github.css'
+CSS_OVERRIDE = ['assets/fix.css']
