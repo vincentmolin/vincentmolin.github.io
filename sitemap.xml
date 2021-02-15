@@ -3,35 +3,35 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/posts/my-second-post/</loc>
+    <loc>http://vincentmolin.github.io/posts/my-second-post/</loc>
     <lastmod>2021-02-15T20:17:07+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/posts/</loc>
+    <loc>http://vincentmolin.github.io/posts/</loc>
     <lastmod>2021-02-15T20:17:07+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>http://vincentmolin.github.io/</loc>
     <lastmod>2021-02-15T20:17:07+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/posts/my-first-post/</loc>
+    <loc>http://vincentmolin.github.io/posts/my-first-post/</loc>
     <lastmod>2021-02-15T20:08:12+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/posts/my-notebook/</loc>
+    <loc>http://vincentmolin.github.io/posts/my-notebook/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>http://vincentmolin.github.io/categories/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>http://vincentmolin.github.io/tags/</loc>
   </url>
   
 </urlset>
