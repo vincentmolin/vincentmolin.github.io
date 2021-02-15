@@ -26,16 +26,6 @@
     </item>
     
     <item>
-      <title>A basic notebook with a front matter and front matter divider...</title>
-      <link>http://vincentmolin.github.io/posts/my-notebook/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://vincentmolin.github.io/posts/my-notebook/</guid>
-      <description>Hello there! Let $F_1$ be a mapping from $\mathbf{R}^2\to {0,1}$. Then do some italics and some bold boys. Code now?
-f = lambda x: x**2 + 1 print(&amp;#34;f(x) for x from 0 to 4:&amp;#34;, *map(f, range(5))) f(x) for x from 0 to 4: 1 2 5 10 17 </description>
-    </item>
-    
-    <item>
       <title>A simple perceptron</title>
       <link>http://vincentmolin.github.io/posts/perceptron/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
