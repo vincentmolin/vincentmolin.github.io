@@ -2,7 +2,8 @@
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Pendulum of Isak</title><link href="/" rel="alternate"></link><link href="feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2021-02-15T12:00:00+01:00</updated><entry><title>Check out this ipynb</title><link href="best-tool22.html" rel="alternate"></link><published>2021-02-15T12:00:00+01:00</published><updated>2021-02-15T12:00:00+01:00</updated><author><name>Vincent</name></author><id>tag:None,2021-02-15:best-tool22.html</id><summary type="html">&lt;p&gt;Hej&lt;/p&gt;</summary><content type="html">&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h3 id="Sentiment-classification"&gt;Sentiment classification&lt;a class="anchor-link" href="#Sentiment-classification"&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Introduction: We train a nn to classify statements as either pro or anti covid19 vaccination&lt;/p&gt;
+&lt;h3 id="Sentiment-classification"&gt;Sentiment classification&lt;a class="anchor-link" href="#Sentiment-classification"&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Here's a tiny change! 😀&lt;/p&gt;
+&lt;p&gt;Introduction: We train a nn to classify statements as either pro or anti covid19 vaccination&lt;/p&gt;
 &lt;p&gt;Using GloVe embeddings&lt;/p&gt;
 &lt;p&gt;NN layout&lt;/p&gt;
 
