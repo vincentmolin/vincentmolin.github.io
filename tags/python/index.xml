@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>&#39;Python&#39;] on Vincent Molin</title>
+    <title>&#39;Python&#39; on Vincent Molin</title>
     <link>http://vincentmolin.github.io/tags/python/</link>
-    <description>Recent content in &#39;Python&#39;] on Vincent Molin</description>
+    <description>Recent content in &#39;Python&#39; on Vincent Molin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Sentiment Classificatio: Preprocessing Part 1</title>
+      <title>Sentiment Classification: Preprocessing Part 1</title>
       <link>http://vincentmolin.github.io/posts/vacc-part1-preprocess/</link>
       <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
       

@@ -5,9 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Sentiment Classificatio: Preprocessing Part 1 | Vincent Molin</title>
+<title>Sentiment Classification: Preprocessing Part 1 | Vincent Molin</title>
 
-<meta name="keywords" content="[&#39;NLP&#39;, &#39;Data&#39;, &#39;Python&#39;]" />
+<meta name="keywords" content="&#39;NLP&#39;, &#39;Data&#39;, &#39;Python&#39;" />
 <meta name="description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
 Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter.">
 <meta name="author" content="Vincent">
@@ -48,7 +48,7 @@ Cleaning up the comments The data we have on hand are roughly 9,000 scraped comm
 </script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script type="text/javascript" id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:title" content="Sentiment Classificatio: Preprocessing Part 1" />
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:title" content="Sentiment Classification: Preprocessing Part 1" />
 <meta property="og:description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
 Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter." />
 <meta property="og:type" content="article" />
@@ -56,7 +56,7 @@ Cleaning up the comments The data we have on hand are roughly 9,000 scraped comm
 <meta property="article:published_time" content="2021-02-16T00:00:00+00:00" />
 <meta property="article:modified_time" content="2021-02-16T00:00:00+00:00" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Sentiment Classificatio: Preprocessing Part 1"/>
+<meta name="twitter:title" content="Sentiment Classification: Preprocessing Part 1"/>
 <meta name="twitter:description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
 Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter."/>
 
@@ -75,7 +75,7 @@ Cleaning up the comments The data we have on hand are roughly 9,000 scraped comm
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Sentiment Classificatio: Preprocessing Part 1",
+      "name": "Sentiment Classification: Preprocessing Part 1",
       "item": "http://vincentmolin.github.io/posts/vacc-part1-preprocess/"
     }
   ]
@@ -85,11 +85,11 @@ Cleaning up the comments The data we have on hand are roughly 9,000 scraped comm
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Sentiment Classificatio: Preprocessing Part 1",
-  "name": "Sentiment Classificatio: Preprocessing Part 1",
+  "headline": "Sentiment Classification: Preprocessing Part 1",
+  "name": "Sentiment Classification: Preprocessing Part 1",
   "description": "In this series of posts we\u0026amp;rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This …",
   "keywords": [
-    "['NLP'", "'Data'", "'Python']"
+    "'NLP'", "'Data'", "'Python'"
   ],
   "articleBody": "In this series of posts we’re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.\nCleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter. Each comment has first been labeled individually as either 1 or 0, expressing a positive or negative stance respectively. All comments have after that also independently been labeled by at least one other annotator, as we will see. Let’s start up pandas, our data handling package of choice, and inspect some rows!\nimport pandas as pd\r# These comments are pretty long\rpd.set_option('display.max_colwidth', None)\r# Technically not a csv but pandas don't mind\rdf = pd.read_csv('vacc_train_data.tsv', sep='\\t', names=['target','comment'])\rdf.head(10)\r.dataframe tbody tr th {\rvertical-align: top;\r}\r.dataframe thead th {\rtext-align: right;\r}\r The goal of our preprocessing steps here is to homogenize the text data a bit. We will later in our first model only consider the words in a given sentence, without regarding the order in which they were written. To this end, punctuation becomes very irrelevant so we will just strip it, and we will also make sure that everything is in lower case. Website URLs also seem reasonable to remove.\nEmojis Special characters that however are of interest are emojis. Consider the following three fictitious comments:\n Vaccine = ☠ vaccine 😀 💉🤮🤮  Stripping the emojis from these comments removes pretty important information. Luckily for us, all emojis have descriptions and we can just translate these using the demoji package! We can now write the text cleaning function. We will make use of some regexp-stuff, just roll with the punches if this looks weird.\nimport re, string\rimport demoji\r# demoji.download_codes()\rdef textify_emojis(text):\r# Returns a dictionary with 'emoji' : 'description' pairs\remojis = demoji.findall(text)\r# We have to slightly modify the descriptions\r# by replacing all special characters with dashes\r# and then surrounding them with \":\" and whitespace\rfor emoji, desc in emojis.items():\rdesc = ' :'+re.sub(r\"[^0-9a-zA-Z]+\", \"-\", desc )+': '\rtext = re.sub(emoji, desc, text)\rreturn text\r# Function that returns nice and clean text\rdef clean_text(text):\r# Make all text lowercase\rtext = text.lower()\r# Remove links\rtext = re.sub('https?://\\S+|www\\.\\S+', '', text)\r# Replace newline with space\rtext = re.sub('\\n', ' ', text)\r# Remove all \":\" and \"-\"-characters first, we will # use these to represent emojis\rtext = re.sub(r\"[:\\-]\", '', text)\r# Replace emojis with text descriptions\rtext = textify_emojis(text)\r# Remove most non-alphanumerical characters\rtext = re.sub(r\"[^0-9a-zA-Z%:\\- ]+\", \"\", text)\r# Get rid of unnecessary whitespace\rtext = ' '.join(text.split())\r# Done!\rreturn text text = \"💉🤮🤮\"\rprint(text, '---', clean_text(text))\r💉🤮🤮 --- :syringe: :face-vomiting: :face-vomiting:\r Nice! Now we apply this to the whole dataset.\ndf['comment'] = df['comment'].apply(lambda x: clean_text(x))\rdf.head(10)\r.dataframe tbody tr th {\rvertical-align: top;\r}\r.dataframe thead th {\rtext-align: right;\r}\r Okay, the percentages look a bit wonky, and we didn’t see any example with an encoded emoji. Looking at the raw data, row 36 contains a comment with an emoji.\nprint(df.loc[35,'comment'])\rtrust the government :rolling-on-the-floor-laughing:\r We might do something about the percentages later, but that’s all for now!\n",
   "wordCount" : "562",
@@ -195,7 +195,7 @@ Cleaning up the comments The data we have on hand are roughly 9,000 scraped comm
   <header class="post-header">
 
     <h1 class="post-title">
-      Sentiment Classificatio: Preprocessing Part 1
+      Sentiment Classification: Preprocessing Part 1
     </h1>
     <div class="post-meta">
 
@@ -306,14 +306,13 @@ df.head(10)
 </code></pre><pre><code>trust the government :rolling-on-the-floor-laughing:
 </code></pre>
 <p>We might do something about the percentages later, but that&rsquo;s all for now!</p>
-<!-- raw HTML omitted -->
 
 </div>
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://vincentmolin.github.io/tags/nlp/">[&#39;NLP&#39;</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/nlp/">&#39;NLP&#39;</a></li>
       <li><a href="http://vincentmolin.github.io/tags/data/">&#39;Data&#39;</a></li>
-      <li><a href="http://vincentmolin.github.io/tags/python/">&#39;Python&#39;]</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/python/">&#39;Python&#39;</a></li>
     </ul>
   </footer>
 </article>
