@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Sentiment Classificatio: Preprocessing Part 1 | Vincent Molin</title>
+
+<meta name="keywords" content="[&#39;NLP&#39;, &#39;Data&#39;, &#39;Python&#39;]" />
+<meta name="description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
+Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter.">
+<meta name="author" content="Vincent">
+<link rel="canonical" href="http://vincentmolin.github.io/posts/vacc-part1-preprocess/" />
+<link href="/assets/css/stylesheet.min.42a34ddfc3f9636c886cc415318bd5be1a3dd171147875e71b23fc4063801c64.css" integrity="sha256-QqNN38P5Y2yIbMQVMYvVvho90XEUeHXnGyP8QGOAHGQ=" rel="preload stylesheet"
+    as="style">
+
+<link rel="icon" href="http://vincentmolin.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://vincentmolin.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://vincentmolin.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://vincentmolin.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://vincentmolin.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', (event) => {
+    document.querySelectorAll("mjx-container").forEach(function (x) {
+      x.parentElement.classList += 'has-jax'
+    })
+  });
+
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:title" content="Sentiment Classificatio: Preprocessing Part 1" />
+<meta property="og:description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
+Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://vincentmolin.github.io/posts/vacc-part1-preprocess/" />
+<meta property="article:published_time" content="2021-02-16T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-02-16T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Sentiment Classificatio: Preprocessing Part 1"/>
+<meta name="twitter:description" content="In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
+Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://vincentmolin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Sentiment Classificatio: Preprocessing Part 1",
+      "item": "http://vincentmolin.github.io/posts/vacc-part1-preprocess/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Sentiment Classificatio: Preprocessing Part 1",
+  "name": "Sentiment Classificatio: Preprocessing Part 1",
+  "description": "In this series of posts we\u0026amp;rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This …",
+  "keywords": [
+    "['NLP'", "'Data'", "'Python']"
+  ],
+  "articleBody": "In this series of posts we’re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.\nCleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter. Each comment has first been labeled individually as either 1 or 0, expressing a positive or negative stance respectively. All comments have after that also independently been labeled by at least one other annotator, as we will see. Let’s start up pandas, our data handling package of choice, and inspect some rows!\nimport pandas as pd\r# These comments are pretty long\rpd.set_option('display.max_colwidth', None)\r# Technically not a csv but pandas don't mind\rdf = pd.read_csv('vacc_train_data.tsv', sep='\\t', names=['target','comment'])\rdf.head(10)\r.dataframe tbody tr th {\rvertical-align: top;\r}\r.dataframe thead th {\rtext-align: right;\r}\r The goal of our preprocessing steps here is to homogenize the text data a bit. We will later in our first model only consider the words in a given sentence, without regarding the order in which they were written. To this end, punctuation becomes very irrelevant so we will just strip it, and we will also make sure that everything is in lower case. Website URLs also seem reasonable to remove.\nEmojis Special characters that however are of interest are emojis. Consider the following three fictitious comments:\n Vaccine = ☠ vaccine 😀 💉🤮🤮  Stripping the emojis from these comments removes pretty important information. Luckily for us, all emojis have descriptions and we can just translate these using the demoji package! We can now write the text cleaning function. We will make use of some regexp-stuff, just roll with the punches if this looks weird.\nimport re, string\rimport demoji\r# demoji.download_codes()\rdef textify_emojis(text):\r# Returns a dictionary with 'emoji' : 'description' pairs\remojis = demoji.findall(text)\r# We have to slightly modify the descriptions\r# by replacing all special characters with dashes\r# and then surrounding them with \":\" and whitespace\rfor emoji, desc in emojis.items():\rdesc = ' :'+re.sub(r\"[^0-9a-zA-Z]+\", \"-\", desc )+': '\rtext = re.sub(emoji, desc, text)\rreturn text\r# Function that returns nice and clean text\rdef clean_text(text):\r# Make all text lowercase\rtext = text.lower()\r# Remove links\rtext = re.sub('https?://\\S+|www\\.\\S+', '', text)\r# Replace newline with space\rtext = re.sub('\\n', ' ', text)\r# Remove all \":\" and \"-\"-characters first, we will # use these to represent emojis\rtext = re.sub(r\"[:\\-]\", '', text)\r# Replace emojis with text descriptions\rtext = textify_emojis(text)\r# Remove most non-alphanumerical characters\rtext = re.sub(r\"[^0-9a-zA-Z%:\\- ]+\", \"\", text)\r# Get rid of unnecessary whitespace\rtext = ' '.join(text.split())\r# Done!\rreturn text text = \"💉🤮🤮\"\rprint(text, '---', clean_text(text))\r💉🤮🤮 --- :syringe: :face-vomiting: :face-vomiting:\r Nice! Now we apply this to the whole dataset.\ndf['comment'] = df['comment'].apply(lambda x: clean_text(x))\rdf.head(10)\r.dataframe tbody tr th {\rvertical-align: top;\r}\r.dataframe thead th {\rtext-align: right;\r}\r Okay, the percentages look a bit wonky, and we didn’t see any example with an encoded emoji. Looking at the raw data, row 36 contains a comment with an emoji.\nprint(df.loc[35,'comment'])\rtrust the government :rolling-on-the-floor-laughing:\r We might do something about the percentages later, but that’s all for now!\n",
+  "wordCount" : "562",
+  "inLanguage": "en",
+  "datePublished": "2021-02-16T00:00:00Z",
+  "dateModified": "2021-02-16T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Vincent"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://vincentmolin.github.io/posts/vacc-part1-preprocess/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vincent Molin",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://vincentmolin.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+
+
+
+
+
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<noscript>
+    <style type="text/css">
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://vincentmolin.github.io/" accesskey="h" title="Vincent Molin (Alt + H)">Vincent Molin</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                
+                
+            </span>
+        </div>
+        <ul id="menu" onscroll="menu_on_scroll()">
+            <li>
+                <a href="http://vincentmolin.github.io/about/" title="about">
+                    <span>about</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://vincentmolin.github.io/archives/" title="archive">
+                    <span>archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://vincentmolin.github.io/search/" title="🔍 (Alt &#43; /)" accesskey=/>
+                    <span>🔍</span>
+                </a>
+            </li></ul>
+    </nav>
+</header>
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+
+    <h1 class="post-title">
+      Sentiment Classificatio: Preprocessing Part 1
+    </h1>
+    <div class="post-meta">
+
+February 16, 2021&nbsp;·&nbsp;Vincent
+
+</div>
+  </header> 
+
+  <div class="post-content">
+<p>In this series of posts we&rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.</p>
+<h3 id="cleaning-up-the-comments">Cleaning up the comments<a hidden class="anchor" aria-hidden="true" href="#cleaning-up-the-comments">#</a></h3>
+<p>The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter. Each comment has first been labeled individually as either 1 or 0, expressing a positive or negative stance respectively. All comments have after that also independently been labeled by at least one other annotator, as we will see. Let&rsquo;s start up <code>pandas</code>, our data handling package of choice, and inspect some rows!</p>
+<pre><code>import pandas as pd
+
+# These comments are pretty long
+pd.set_option('display.max_colwidth', None)
+
+# Technically not a csv but pandas don't mind
+df = pd.read_csv('vacc_train_data.tsv', sep='\t', names=['target','comment'])
+
+df.head(10)
+</code></pre><!-- raw HTML omitted -->
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+<p><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<p>The goal of our preprocessing steps here is to homogenize the text data a bit. We will later in our first model only consider the words in a given sentence, without regarding the order in which they were written. To this end, punctuation becomes very irrelevant so we will just strip it, and we will also make sure that everything is in lower case. Website URLs also seem reasonable to remove.</p>
+<h3 id="emojis">Emojis<a hidden class="anchor" aria-hidden="true" href="#emojis">#</a></h3>
+<p>Special characters that however are of interest are emojis. Consider the following three fictitious comments:</p>
+<ol>
+<li><code>Vaccine = ☠</code></li>
+<li><code>vaccine 😀</code></li>
+<li><code>💉🤮🤮</code></li>
+</ol>
+<p>Stripping the emojis from these comments removes pretty important information.
+Luckily for us, all emojis have descriptions and we can just translate these using the <code>demoji</code> package! We can now write the text cleaning function. We will make use of some regexp-stuff, just roll with the punches if this looks weird.</p>
+<pre><code>import re, string
+import demoji
+# demoji.download_codes()
+
+def textify_emojis(text):
+    # Returns a dictionary with 'emoji' : 'description' pairs
+    emojis = demoji.findall(text)
+
+    # We have to slightly modify the descriptions
+    # by replacing all special characters with dashes
+    # and then surrounding them with &quot;:&quot; and whitespace
+    for emoji, desc in emojis.items():
+        desc = ' :'+re.sub(r&quot;[^0-9a-zA-Z]+&quot;, &quot;-&quot;, desc )+': '
+        text = re.sub(emoji, desc, text)
+
+    return text
+
+# Function that returns nice and clean text
+def clean_text(text):
+    # Make all text lowercase
+    text = text.lower()
+
+    # Remove links
+    text = re.sub('https?://\S+|www\.\S+', '', text)
+
+    # Replace newline with space
+    text = re.sub('\n', ' ', text)
+
+    # Remove all &quot;:&quot; and &quot;-&quot;-characters first, we will 
+    # use these to represent emojis
+    text = re.sub(r&quot;[:\-]&quot;, '', text)
+
+    # Replace emojis with text descriptions
+    text = textify_emojis(text)
+
+    # Remove most non-alphanumerical characters
+    text = re.sub(r&quot;[^0-9a-zA-Z%:\- ]+&quot;, &quot;&quot;, text)
+
+    # Get rid of unnecessary whitespace
+    text = ' '.join(text.split())
+
+    # Done!
+    return text    
+
+text = &quot;💉🤮🤮&quot;
+print(text, '---&gt;', clean_text(text))
+</code></pre><pre><code>💉🤮🤮 ---&gt; :syringe: :face-vomiting: :face-vomiting:
+</code></pre>
+<p>Nice! Now we apply this to the whole dataset.</p>
+<pre><code>df['comment'] = df['comment'].apply(lambda x: clean_text(x))
+
+df.head(10)
+</code></pre><!-- raw HTML omitted -->
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+<p><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<p>Okay, the percentages look a bit wonky, and we didn&rsquo;t see any example with an encoded emoji. Looking at the raw data, row 36 contains a comment with an emoji.</p>
+<pre><code>print(df.loc[35,'comment'])
+</code></pre><pre><code>trust the government :rolling-on-the-floor-laughing:
+</code></pre>
+<p>We might do something about the percentages later, but that&rsquo;s all for now!</p>
+<!-- raw HTML omitted -->
+
+</div>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://vincentmolin.github.io/tags/nlp/">[&#39;NLP&#39;</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/data/">&#39;Data&#39;</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/python/">&#39;Python&#39;]</a></li>
+    </ul>
+  </footer>
+</article>
+    </main><footer class="footer">
+    <span>&copy; 2021 <a href="http://vincentmolin.github.io/">Vincent Molin</a></span>
+    <span>&middot;</span>
+    <span>Powered by <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a></span>
+    <span>&middot;</span>
+    <span>Theme <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)">
+    <button class="top-link" id="top-link" type="button" accesskey="g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z" />
+        </svg>
+    </button>
+</a>
+
+
+
+<script defer src="/assets/js/highlight.min.27cd435cc9ed6abb4b496581b151804f79f366c412620272bb94e2f5f598ebcc.js" integrity="sha256-J81DXMntartLSWWBsVGAT3nzZsQSYgJyu5Ti9fWY68w="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<script>
+    window.onload = function () {
+        if (localStorage.getItem("menu-scroll-position")) {
+            document.getElementById('menu').scrollLeft = localStorage.getItem("menu-scroll-position");
+        }
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+    function menu_on_scroll() {
+        localStorage.setItem("menu-scroll-position", document.getElementById('menu').scrollLeft);
+    }
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+</body>
+
+</html>

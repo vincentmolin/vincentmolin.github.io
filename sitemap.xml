@@ -3,12 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://vincentmolin.github.io/posts/my-notebook/</loc>
+    <loc>http://vincentmolin.github.io/tags/data/</loc>
     <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://vincentmolin.github.io/posts/my-pyplot/</loc>
+    <loc>http://vincentmolin.github.io/tags/python/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://vincentmolin.github.io/tags/nlp/</loc>
     <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
@@ -18,18 +23,18 @@
   </url>
   
   <url>
-    <loc>http://vincentmolin.github.io/</loc>
+    <loc>http://vincentmolin.github.io/posts/vacc-part1-preprocess/</loc>
     <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://vincentmolin.github.io/posts/my-second-post/</loc>
-    <lastmod>2021-02-15T20:17:07+01:00</lastmod>
+    <loc>http://vincentmolin.github.io/tags/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://vincentmolin.github.io/posts/old-note/</loc>
-    <lastmod>2021-02-12T20:17:07+01:00</lastmod>
+    <loc>http://vincentmolin.github.io/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -50,10 +55,6 @@
   
   <url>
     <loc>http://vincentmolin.github.io/search/</loc>
-  </url>
-  
-  <url>
-    <loc>http://vincentmolin.github.io/tags/</loc>
   </url>
   
 </urlset>

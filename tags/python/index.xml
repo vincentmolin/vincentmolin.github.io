@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Vincent Molin</title>
-    <link>http://vincentmolin.github.io/posts/</link>
-    <description>Recent content in Posts on Vincent Molin</description>
+    <title>&#39;Python&#39;] on Vincent Molin</title>
+    <link>http://vincentmolin.github.io/tags/python/</link>
+    <description>Recent content in &#39;Python&#39;] on Vincent Molin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sentiment Classificatio: Preprocessing Part 1</title>
       <link>http://vincentmolin.github.io/posts/vacc-part1-preprocess/</link>
@@ -15,16 +15,6 @@
       <guid>http://vincentmolin.github.io/posts/vacc-part1-preprocess/</guid>
       <description>In this series of posts we&amp;rsquo;re going to build a text classification model that predicts whether a comment expresses a negative or positive stance on COVID-19 vaccination. This short first installment will deal with the way in which we digest the raw comments into something a bit more workable before doing any machine-learn-y things.
 Cleaning up the comments The data we have on hand are roughly 9,000 scraped comments from various sources such as YouTube, Reddit and Twitter.</description>
-    </item>
-    
-    <item>
-      <title>A simple perceptron</title>
-      <link>http://vincentmolin.github.io/posts/perceptron/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://vincentmolin.github.io/posts/perceptron/</guid>
-      <description>Some year around the time when we started using computers, the 50s or so, someone came up with the idea of the perceptron: the brain-inspired machine that could learn! Even though the author had high hopes for this model, it sadly couldn&amp;rsquo;t learn very much. It is however very easy to implement, so let&amp;rsquo;s do it.
-# Start writing code here...</description>
     </item>
     
   </channel>
