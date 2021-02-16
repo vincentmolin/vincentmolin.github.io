@@ -27,16 +27,6 @@ f = lambda x: x**2 + 1 print(&amp;#34;f(x) for x from 0 to 4:&amp;#34;, *map(f, 
     </item>
     
     <item>
-      <title>My First Post now fix</title>
-      <link>http://vincentmolin.github.io/posts/my-first-post/</link>
-      <pubDate>Mon, 15 Feb 2021 20:08:12 +0100</pubDate>
-      
-      <guid>http://vincentmolin.github.io/posts/my-first-post/</guid>
-      <description>Hello everybody yeah.
-$$ \frac{a}{b} $$</description>
-    </item>
-    
-    <item>
       <title>My Second Post</title>
       <link>http://vincentmolin.github.io/posts/old-note/</link>
       <pubDate>Fri, 12 Feb 2021 20:17:07 +0100</pubDate>
