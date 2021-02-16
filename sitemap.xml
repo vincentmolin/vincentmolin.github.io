@@ -3,17 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://vincentmolin.github.io/posts/my-second-post/</loc>
-    <lastmod>2021-02-15T20:17:07+01:00</lastmod>
+    <loc>http://vincentmolin.github.io/posts/my-notebook/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>http://vincentmolin.github.io/posts/</loc>
-    <lastmod>2021-02-15T20:17:07+01:00</lastmod>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>http://vincentmolin.github.io/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://vincentmolin.github.io/posts/my-second-post/</loc>
     <lastmod>2021-02-15T20:17:07+01:00</lastmod>
   </url>
   
