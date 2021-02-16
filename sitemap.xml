@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>http://vincentmolin.github.io/posts/my-pyplot/</loc>
+    <lastmod>2021-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://vincentmolin.github.io/posts/</loc>
     <lastmod>2021-02-16T00:00:00+00:00</lastmod>
   </url>
@@ -29,6 +34,10 @@
   
   <url>
     <loc>http://vincentmolin.github.io/posts/perceptron/</loc>
+  </url>
+  
+  <url>
+    <loc>http://vincentmolin.github.io/about/</loc>
   </url>
   
   <url>
