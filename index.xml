@@ -18,12 +18,12 @@ f = lambda x: x**2 + 1 print(&amp;#34;f(x) for x from 0 to 4:&amp;#34;, *map(f, 
     </item>
     
     <item>
-      <title>My Second Post</title>
+      <title>My Second edited Post</title>
       <link>http://vincentmolin.github.io/posts/my-second-post/</link>
       <pubDate>Mon, 15 Feb 2021 20:17:07 +0100</pubDate>
       
       <guid>http://vincentmolin.github.io/posts/my-second-post/</guid>
-      <description>Wats</description>
+      <description>Wats hhhhhh</description>
     </item>
     
     <item>
