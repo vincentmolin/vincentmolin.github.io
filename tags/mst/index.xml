@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MST on Vincent Molin</title>
+    <link>http://vincentmolin.github.io/tags/mst/</link>
+    <description>Recent content in MST on Vincent Molin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/tags/mst/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Generating a maze in Python</title>
+      <link>http://vincentmolin.github.io/posts/maze/</link>
+      <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://vincentmolin.github.io/posts/maze/</guid>
+      <description>The following script generates a &amp;ldquo;maze&amp;rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &amp;ldquo;maze&amp;rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&amp;rsquo;t form any cycles. This procedure is known as Prim&amp;rsquo;s algorithm.
+import numpy as np from matplotlib.</description>
+    </item>
+    
+  </channel>
+</rss>

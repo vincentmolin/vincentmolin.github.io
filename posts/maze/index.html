@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Generating a maze in Python | Vincent Molin</title>
+
+<meta name="keywords" content="python, MST, algorithms" />
+<meta name="description" content="The following script generates a &ldquo;maze&rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &ldquo;maze&rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&rsquo;t form any cycles. This procedure is known as Prim&rsquo;s algorithm.
+import numpy as np from matplotlib.">
+<meta name="author" content="Vincent">
+<link rel="canonical" href="http://vincentmolin.github.io/posts/maze/" />
+<link href="/assets/css/stylesheet.min.42a34ddfc3f9636c886cc415318bd5be1a3dd171147875e71b23fc4063801c64.css" integrity="sha256-QqNN38P5Y2yIbMQVMYvVvho90XEUeHXnGyP8QGOAHGQ=" rel="preload stylesheet"
+    as="style">
+
+<link rel="icon" href="http://vincentmolin.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://vincentmolin.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://vincentmolin.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://vincentmolin.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://vincentmolin.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', (event) => {
+    document.querySelectorAll("mjx-container").forEach(function (x) {
+      x.parentElement.classList += 'has-jax'
+    })
+  });
+
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:title" content="Generating a maze in Python" />
+<meta property="og:description" content="The following script generates a &ldquo;maze&rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &ldquo;maze&rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&rsquo;t form any cycles. This procedure is known as Prim&rsquo;s algorithm.
+import numpy as np from matplotlib." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://vincentmolin.github.io/posts/maze/" />
+<meta property="article:published_time" content="2021-03-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-03-01T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Generating a maze in Python"/>
+<meta name="twitter:description" content="The following script generates a &ldquo;maze&rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &ldquo;maze&rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&rsquo;t form any cycles. This procedure is known as Prim&rsquo;s algorithm.
+import numpy as np from matplotlib."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://vincentmolin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Generating a maze in Python",
+      "item": "http://vincentmolin.github.io/posts/maze/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Generating a maze in Python",
+  "name": "Generating a maze in Python",
+  "description": "The following script generates a \u0026amp;ldquo;maze\u0026amp;rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The \u0026amp;ldquo;maze\u0026amp;rdquo; is …",
+  "keywords": [
+    "python", "MST", "algorithms"
+  ],
+  "articleBody": "The following script generates a “maze” that satisfies the following condition: there is a single unique path connecting any two points. The “maze” is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don’t form any cycles. This procedure is known as Prim’s algorithm.\nimport numpy as np from matplotlib.patches import Circle, Arrow, Rectangle import matplotlib.pyplot as plt # actually creates a rectangular grid graph with random edge-weights # and finds a minimal spanning tree by running Prim's algorithm def create_maze_graph(width, height): rng = np.random.default_rng() # unique integer weights! (not necessary) edge_weights = rng.permutation(2 * width * height - width - height) # weights for vertical connections V = np.reshape(edge_weights[:width*(height-1)], (height-1, width)) # weights for horizontal connections H = np.reshape(edge_weights[-(width-1)*height:], (height, width-1)) # keep track of visited nodes nodes_visited = np.zeros((height, width)) # start somewhere nodes_visited[0,0] = 1 # let's count this as well n_nodes_visited = 1 # list of edges currently in consideration visible_edges = [ ((0,0), (0,1), H[0,0]), ((0,0), (1,0), V[0,0])] edges = [] while n_nodes_visited  width*height: # find cheapest visible edge and save it edge = min(visible_edges, key = lambda x : x[2]) edges.append(edge) # where we came from old_node = edge[0] # where we went new_node = edge[1] nodes_visited[new_node] = 1 n_nodes_visited += 1 # remove edges leading in to the new node visible_edges = list(filter(lambda x: x[1] != new_node, visible_edges)) # add new visible edges... row = new_node[0] col = new_node[1] # ...above? if row  0: if not nodes_visited[(row - 1, col)]: visible_edges.append((new_node, (row - 1, col), V[(row - 1, col)])) # ...under? if row  height - 1: if not nodes_visited[(row + 1, col)]: visible_edges.append((new_node, (row + 1, col), V[(row, col)])) # ...to the left? if col  0: if not nodes_visited[(row, col - 1)]: visible_edges.append((new_node, (row, col - 1), H[(row, col - 1)])) # ...to the right? if col  width - 1: if not nodes_visited[(row, col + 1)]: visible_edges.append((new_node, (row, col + 1), H[(row, col)])) return edges # draw the maze def plot_maze_graph(width, height, edges, r=0.27): fig = plt.figure(figsize=(20 * width / ( width + height ), 20 * height / ( width + height ))) fig.patch.set_facecolor('#1d1e20') ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1.) ax.set_xlim(0, width) ax.set_ylim(0, height) ax.set_axis_off() ax.set_facecolor((0.5,0.5,0.5)) for edge in edges: start = edge[0] end = edge[1] x = min(start[1], end[1]) - r + 0.5 y = min(start[0], end[0]) - r + 0.5 w = abs(start[1] - end[1]) + 2 * r h = abs(start[0] - end[0]) + 2 * r ax.add_patch(Rectangle((x,y), w, h, color='white')) plt.show() # and let's generate one! width = 20 height = 20 edges = create_maze_graph(width, height) plot_maze_graph(width, height, edges) Cool!\n",
+  "wordCount" : "464",
+  "inLanguage": "en",
+  "datePublished": "2021-03-01T00:00:00Z",
+  "dateModified": "2021-03-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Vincent"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://vincentmolin.github.io/posts/maze/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vincent Molin",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://vincentmolin.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+
+
+
+
+
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<noscript>
+    <style type="text/css">
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://vincentmolin.github.io/" accesskey="h" title="Vincent Molin (Alt + H)">Vincent Molin</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                
+                
+            </span>
+        </div>
+        <ul id="menu" onscroll="menu_on_scroll()">
+            <li>
+                <a href="http://vincentmolin.github.io/about/" title="about">
+                    <span>about</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://vincentmolin.github.io/archives/" title="archive">
+                    <span>archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://vincentmolin.github.io/search/" title="🔍 (Alt &#43; /)" accesskey=/>
+                    <span>🔍</span>
+                </a>
+            </li></ul>
+    </nav>
+</header>
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+
+    <h1 class="post-title">
+      Generating a maze in Python
+    </h1>
+    <div class="post-meta">
+
+March 1, 2021&nbsp;·&nbsp;Vincent
+
+</div>
+  </header> 
+
+  <div class="post-content">
+<p>The following script generates a &ldquo;maze&rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &ldquo;maze&rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&rsquo;t form any cycles. This procedure is known as Prim&rsquo;s algorithm.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">from</span> matplotlib.patches <span style="color:#f92672">import</span> Circle, Arrow, Rectangle
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+<span style="color:#75715e"># actually creates a rectangular grid graph with random edge-weights</span>
+<span style="color:#75715e"># and finds a minimal spanning tree by running Prim&#39;s algorithm</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_maze_graph</span>(width, height):
+    
+    rng <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>default_rng()
+    
+    <span style="color:#75715e"># unique integer weights! (not necessary)</span>
+    edge_weights <span style="color:#f92672">=</span> rng<span style="color:#f92672">.</span>permutation(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> width <span style="color:#f92672">*</span> height <span style="color:#f92672">-</span> width <span style="color:#f92672">-</span> height)
+
+    <span style="color:#75715e"># weights for vertical connections</span>
+    V <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(edge_weights[:width<span style="color:#f92672">*</span>(height<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)],  (height<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, width))
+    
+    <span style="color:#75715e"># weights for horizontal connections</span>
+    H <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(edge_weights[<span style="color:#f92672">-</span>(width<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>height:], (height, width<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>))
+
+    <span style="color:#75715e"># keep track of visited nodes</span>
+    nodes_visited <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((height, width))
+
+    <span style="color:#75715e"># start somewhere</span>
+    nodes_visited[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    
+    <span style="color:#75715e"># let&#39;s count this as well</span>
+    n_nodes_visited <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+    <span style="color:#75715e"># list of edges currently in consideration</span>
+    visible_edges <span style="color:#f92672">=</span> [
+        ((<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>), H[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]), 
+        ((<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>), V[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>])]
+
+    edges <span style="color:#f92672">=</span> []
+
+    <span style="color:#66d9ef">while</span> n_nodes_visited <span style="color:#f92672">&lt;</span> width<span style="color:#f92672">*</span>height:
+
+        <span style="color:#75715e"># find cheapest visible edge and save it</span>
+        edge <span style="color:#f92672">=</span> min(visible_edges, key <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x : x[<span style="color:#ae81ff">2</span>])
+        edges<span style="color:#f92672">.</span>append(edge)
+
+        <span style="color:#75715e"># where we came from</span>
+        old_node <span style="color:#f92672">=</span> edge[<span style="color:#ae81ff">0</span>]
+        
+        <span style="color:#75715e"># where we went</span>
+        new_node <span style="color:#f92672">=</span> edge[<span style="color:#ae81ff">1</span>]
+        nodes_visited[new_node] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+        n_nodes_visited <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+
+        <span style="color:#75715e"># remove edges leading in to the new node</span>
+        visible_edges <span style="color:#f92672">=</span> list(filter(<span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> new_node, visible_edges))
+
+        <span style="color:#75715e"># add new visible edges...</span>
+        row <span style="color:#f92672">=</span> new_node[<span style="color:#ae81ff">0</span>]
+        col <span style="color:#f92672">=</span> new_node[<span style="color:#ae81ff">1</span>]
+        
+        <span style="color:#75715e"># ...above?</span>
+        <span style="color:#66d9ef">if</span> row <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> nodes_visited[(row <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>, col)]:
+                visible_edges<span style="color:#f92672">.</span>append((new_node, (row <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>, col), V[(row <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>, col)]))
+        <span style="color:#75715e"># ...under?</span>
+        <span style="color:#66d9ef">if</span> row <span style="color:#f92672">&lt;</span> height <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>:
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> nodes_visited[(row <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, col)]:
+                visible_edges<span style="color:#f92672">.</span>append((new_node, (row <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, col), V[(row, col)]))
+        <span style="color:#75715e"># ...to the left?</span>
+        <span style="color:#66d9ef">if</span> col <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> nodes_visited[(row, col <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)]:
+                visible_edges<span style="color:#f92672">.</span>append((new_node, (row, col <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>), H[(row, col <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)]))
+        <span style="color:#75715e"># ...to the right?</span>
+        <span style="color:#66d9ef">if</span> col <span style="color:#f92672">&lt;</span> width <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>:
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> nodes_visited[(row, col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)]:
+                visible_edges<span style="color:#f92672">.</span>append((new_node, (row, col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>), H[(row, col)]))
+    
+    <span style="color:#66d9ef">return</span> edges
+
+
+<span style="color:#75715e"># draw the maze</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plot_maze_graph</span>(width, height, edges, r<span style="color:#f92672">=</span><span style="color:#ae81ff">0.27</span>):
+
+    fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span> <span style="color:#f92672">*</span> width  <span style="color:#f92672">/</span> ( width <span style="color:#f92672">+</span> height ),
+                              <span style="color:#ae81ff">20</span> <span style="color:#f92672">*</span> height <span style="color:#f92672">/</span> ( width <span style="color:#f92672">+</span> height )))
+    fig<span style="color:#f92672">.</span>patch<span style="color:#f92672">.</span>set_facecolor(<span style="color:#e6db74">&#39;#1d1e20&#39;</span>)
+    ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_axes([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], frameon<span style="color:#f92672">=</span>False, aspect<span style="color:#f92672">=</span><span style="color:#ae81ff">1.</span>)
+    ax<span style="color:#f92672">.</span>set_xlim(<span style="color:#ae81ff">0</span>, width)
+    ax<span style="color:#f92672">.</span>set_ylim(<span style="color:#ae81ff">0</span>, height)
+    ax<span style="color:#f92672">.</span>set_axis_off()
+    ax<span style="color:#f92672">.</span>set_facecolor((<span style="color:#ae81ff">0.5</span>,<span style="color:#ae81ff">0.5</span>,<span style="color:#ae81ff">0.5</span>))
+
+    <span style="color:#66d9ef">for</span> edge <span style="color:#f92672">in</span> edges:
+        start <span style="color:#f92672">=</span> edge[<span style="color:#ae81ff">0</span>]
+        end <span style="color:#f92672">=</span> edge[<span style="color:#ae81ff">1</span>]
+        x <span style="color:#f92672">=</span> min(start[<span style="color:#ae81ff">1</span>], end[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">-</span> r <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span>
+        y <span style="color:#f92672">=</span> min(start[<span style="color:#ae81ff">0</span>], end[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">-</span> r <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span>
+        w <span style="color:#f92672">=</span> abs(start[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> end[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> r
+        h <span style="color:#f92672">=</span> abs(start[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> end[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> r
+        ax<span style="color:#f92672">.</span>add_patch(Rectangle((x,y), w, h, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;white&#39;</span>))
+
+    plt<span style="color:#f92672">.</span>show()
+
+    
+<span style="color:#75715e"># and let&#39;s generate one!</span>
+width <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
+height <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
+
+edges <span style="color:#f92672">=</span> create_maze_graph(width, height)
+plot_maze_graph(width, height, edges)
+</code></pre></div><p><img src="/img/maze/output_2_0.svg#center" alt="svg"></p>
+<p>Cool!</p>
+
+</div>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://vincentmolin.github.io/tags/python/">python</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/mst/">MST</a></li>
+      <li><a href="http://vincentmolin.github.io/tags/algorithms/">algorithms</a></li>
+    </ul>
+  </footer>
+</article>
+    </main><footer class="footer">
+    <span>&copy; 2021 <a href="http://vincentmolin.github.io/">Vincent Molin</a></span>
+    <span>&middot;</span>
+    <span>Powered by <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a></span>
+    <span>&middot;</span>
+    <span>Theme <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)">
+    <button class="top-link" id="top-link" type="button" accesskey="g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z" />
+        </svg>
+    </button>
+</a>
+
+
+
+<script defer src="/assets/js/highlight.min.27cd435cc9ed6abb4b496581b151804f79f366c412620272bb94e2f5f598ebcc.js" integrity="sha256-J81DXMntartLSWWBsVGAT3nzZsQSYgJyu5Ti9fWY68w="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<script>
+    window.onload = function () {
+        if (localStorage.getItem("menu-scroll-position")) {
+            document.getElementById('menu').scrollLeft = localStorage.getItem("menu-scroll-position");
+        }
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+    function menu_on_scroll() {
+        localStorage.setItem("menu-scroll-position", document.getElementById('menu').scrollLeft);
+    }
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+</body>
+
+</html>

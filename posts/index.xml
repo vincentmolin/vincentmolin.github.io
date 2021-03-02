@@ -6,7 +6,26 @@
     <description>Recent content in Posts on Vincent Molin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://vincentmolin.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Generating a maze in Python</title>
+      <link>http://vincentmolin.github.io/posts/maze/</link>
+      <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://vincentmolin.github.io/posts/maze/</guid>
+      <description>The following script generates a &amp;ldquo;maze&amp;rdquo; that satisfies the following condition: there is a single unique path connecting any two points. The &amp;ldquo;maze&amp;rdquo; is actually the minimal spanning tree of a grid graph with random edge weights. We find this tree by starting in an arbitrary point and then greedily add the cheapest visible edge such that we don&amp;rsquo;t form any cycles. This procedure is known as Prim&amp;rsquo;s algorithm.
+import numpy as np from matplotlib.</description>
+    </item>
+    
+    <item>
+      <title>Test: Notebook With Plot and Table</title>
+      <link>http://vincentmolin.github.io/posts/my-pyplot/</link>
+      <pubDate>Thu, 18 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://vincentmolin.github.io/posts/my-pyplot/</guid>
+      <description>import matplotlib.pyplot as plt import numpy as np x = np.array(range(0,10)) y = x ** 2 plt.plot(x,y) plt.show() import pandas as pd df = pd.read_csv(&amp;#39;vacc_train_data.tsv&amp;#39;,sep=&amp;#39;\t&amp;#39;, names=[&amp;#39;target&amp;#39;,&amp;#39;comment&amp;#39;]) df.head(5) .dataframe tbody tr th {vertical-align: top;}.dataframe thead th {text-align: right;} </description>
+    </item>
+    
     <item>
       <title>Sentiment Classification: Preprocessing Part 1</title>
       <link>http://vincentmolin.github.io/posts/vacc-part1-preprocess/</link>
