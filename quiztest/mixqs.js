@@ -1,4 +1,4 @@
-export const mixqs = [
+const mixqs = [
   {
     "question": "Vilket påstående beskriver det vi kallar för Bias?",
     "answerFormat": "$ans1A avvikelse från $ans1B",
@@ -15,14 +15,14 @@ export const mixqs = [
       {
         "id": "$ans1B",
         "correct": [
-          "referens material mätt med referensmetod",
-          "det rätta värdet"
+          "det rätta värdet",
+          "referens material mätt med referensmetod"
         ],
         "wrong": [
-          "tillverkarens kalibrator",
-          "tillverkarens kvalitetskontroll",
           "medelvärdet",
-          "medianen"
+          "tillverkarens kalibrator",
+          "medianen",
+          "tillverkarens kvalitetskontroll"
         ]
       }
     ]
@@ -38,12 +38,12 @@ export const mixqs = [
           "lägsta nivå"
         ],
         "wrong": [
-          "mediankoncentration",
-          "mediannivå",
-          "koncentrationsavvikelse",
-          "högsta koncentration",
+          "högsta nivå",
           "medelkoncentration",
-          "högsta nivå"
+          "mediankoncentration",
+          "högsta koncentration",
+          "koncentrationsavvikelse",
+          "mediannivå"
         ]
       },
       {
@@ -53,9 +53,9 @@ export const mixqs = [
           "det man mäter"
         ],
         "wrong": [
-          "regressionkoefficienten",
+          "konfidensintervallet",
           "variationen",
-          "konfidensintervallet"
+          "regressionkoefficienten"
         ]
       },
       {
@@ -69,8 +69,8 @@ export const mixqs = [
           0.4,
           0.5,
           1,
-          "metodens median",
-          "medelvärdet"
+          "medelvärdet",
+          "metodens median"
         ]
       }
     ]
@@ -82,13 +82,13 @@ export const mixqs = [
       {
         "id": "$ans1A",
         "correct": [
+          "vilka mätvärden",
           "vilket spann av mätvärden",
-          "vilken variation",
-          "vilka mätvärden"
+          "vilken variation"
         ],
         "wrong": [
-          "vilka avvikande värden",
           "vilka medianer",
+          "vilka avvikande värden",
           "vilka skillnader i mätvärden",
           "vilka medelvärden"
         ]
@@ -96,33 +96,33 @@ export const mixqs = [
       {
         "id": "$ans1B",
         "correct": [
-          "uppenbart friska",
           "de utan uppenbar sjukdom",
           "de som verkar vara friska",
-          "friska"
+          "friska",
+          "uppenbart friska"
         ],
         "wrong": [
+          "de som inte står på någon medicin",
           "de som saknar alla sjukdomar som vi känner till",
-          "unga och friska",
-          "sjuka",
           "de som kan ha sjukdom",
-          "de som inte står på någon medicin"
+          "unga och friska",
+          "sjuka"
         ]
       },
       {
         "id": "$ans1C",
         "correct": [
-          "en nivå av en analyt",
           "en gräns",
-          "en nivå av en biomarkör",
-          "ett mätvärde"
+          "ett mätvärde",
+          "en nivå av en analyt",
+          "en nivå av en biomarkör"
         ],
         "wrong": [
-          "ett spridingsmått",
-          "en median",
-          "ett medelvärde",
           "2 standardavvikelser över medlevärdet",
-          "den 97.5:e percentil"
+          "ett medelvärde",
+          "den 97.5:e percentil",
+          "en median",
+          "ett spridingsmått"
         ]
       },
       {
@@ -132,11 +132,11 @@ export const mixqs = [
           "särskiljer"
         ],
         "wrong": [
-          "sammanför",
-          "förenar",
-          "införlivar",
           "visar vad som är gemensamt för",
-          "kombinerar"
+          "förenar",
+          "sammanför",
+          "kombinerar",
+          "införlivar"
         ]
       },
       {
@@ -146,9 +146,9 @@ export const mixqs = [
           "de utan sjukdom"
         ],
         "wrong": [
-          "de som överlever",
+          "de som kanske är friska",
           "de med mild sjukdom",
-          "de som kanske är friska"
+          "de som överlever"
         ]
       }
     ]
@@ -161,17 +161,17 @@ export const mixqs = [
         "id": "$ans1A",
         "correct": [
           "konsekutivt urval",
-          "slumpat urval",
-          "randomiserat urval"
+          "randomiserat urval",
+          "slumpat urval"
         ],
         "wrong": [
+          "urval av enbart ungre",
           "urval med mest män",
-          "selekterat urval",
-          "särskiljt urval",
-          "sållat urval",
-          "könsselekterat urval",
           "sovrat urval",
-          "urval av enbart ungre"
+          "könsselekterat urval",
+          "selekterat urval",
+          "sållat urval",
+          "särskiljt urval"
         ]
       },
       {
@@ -181,24 +181,24 @@ export const mixqs = [
           "individer"
         ],
         "wrong": [
-          "kvinnor",
+          "äldre",
           "män",
-          "sjuka",
           "patienter",
-          "äldre"
+          "kvinnor",
+          "sjuka"
         ]
       },
       {
         "id": "$ans1C",
         "correct": [
-          "inte ha tillstånd",
           "vara friska",
-          "sakna tillstånd"
+          "sakna tillstånd",
+          "inte ha tillstånd"
         ],
         "wrong": [
-          "drabbade av tillstånd",
           "ha sjukdom",
           "innefatta tillstånd",
+          "drabbade av tillstånd",
           "ha tillstånd"
         ]
       },
@@ -206,18 +206,18 @@ export const mixqs = [
         "id": "$ans1D",
         "correct": [
           "det mätvärde",
-          "den measurand",
           "den biomarkör",
+          "den measurand",
           "den analyt"
         ],
         "wrong": [
-          "standardavvikelsen",
-          "det konfidensintervall",
           "det medicinska ansvarsområdet",
-          "den medicinska process",
+          "standardavvikelsen",
+          "medelvärdet",
           "sjukdomen",
+          "det konfidensintervall",
           "diagnosen",
-          "medelvärdet"
+          "den medicinska process"
         ]
       }
     ]
@@ -229,16 +229,16 @@ export const mixqs = [
       {
         "id": "$ans1A",
         "correct": [
-          "plussar en ihop",
           "summeras",
-          "adderas"
+          "adderas",
+          "plussar en ihop"
         ],
         "wrong": [
-          "faktoreras",
-          "tar en medelvärdet av",
           "subtraheras",
+          "tar en medelvärdet av",
+          "beräknas medianen av",
           "kvadreras",
-          "beräknas medianen av"
+          "faktoreras"
         ]
       },
       {
@@ -250,13 +250,13 @@ export const mixqs = [
         ],
         "wrong": [
           "avstånd upphöjt i tre",
-          "faktorerade avstånd",
-          "medelvädesnormerade avstånd",
           "subtraherade avstånd",
+          "faktorerade avstånd",
           "normerade avstånd",
-          "summerade avstånd",
           "avstånd upphöjt i fyra",
-          "logaritmerade avstånd"
+          "summerade avstånd",
+          "logaritmerade avstånd",
+          "medelvädesnormerade avstånd"
         ]
       },
       {
@@ -266,32 +266,32 @@ export const mixqs = [
           "medelvärdet"
         ],
         "wrong": [
-          "95% konfidensintervalllet",
-          "maxvärdet",
           "minsta värdet",
+          "medianen",
           "90% konfidensintervalllet",
-          "medianen"
+          "maxvärdet",
+          "95% konfidensintervalllet"
         ]
       },
       {
         "id": "$ans1D",
         "correct": [
-          "antalet data minus ett",
-          "datas antal minus 1",
           "datas antal minus ett",
-          "datas antal minus ett tal som påverkas av antalet frihesgader",
-          "antalet data minus 1"
+          "datas antal minus 1",
+          "antalet data minus ett",
+          "antalet data minus 1",
+          "datas antal minus ett tal som påverkas av antalet frihesgader"
         ],
         "wrong": [
-          "antalet data minus två",
-          "summan av all data",
-          "antalet data multiplicerat med 1.5",
           "antalet jämna data",
-          "medelvärdet av alla data ",
-          "medelvärdet av alla data minus ett",
           "antalet data minus datas medelvärde",
+          "medelvärdet av alla data minus ett",
+          "antalet data plus ett",
+          "summan av all data",
           "antalet data minus 3",
-          "antalet data plus ett"
+          "antalet data multiplicerat med 1.5",
+          "medelvärdet av alla data ",
+          "antalet data minus två"
         ]
       },
       {
@@ -300,8 +300,8 @@ export const mixqs = [
           ", sedan tar man roten ur."
         ],
         "wrong": [
-          ", sedan kvadrerar man detta.",
-          "."
+          ".",
+          ", sedan kvadrerar man detta."
         ]
       }
     ]
