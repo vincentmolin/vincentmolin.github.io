@@ -1,4 +1,4 @@
-//import 'mixqs/mixqs.js';
+//import {mixqs} from 'mixqs.js';
 
 const app = Vue.createApp({
   data() {
@@ -39,317 +39,24 @@ const app = Vue.createApp({
           }
         },
         {
-          "question": "Skatta variansen för följande data.",
+          "question": "Var ligger medianen för följande data?",
           "data": {
             dist: "normal",
-            n: 12,
-            mu: [25, 35],
-            sigma: [5, 8]
+            n: 7,
+            mu: [10, 10],
+            sigma: [2, 3]
           },
           correctAnswer: (data) => {
-            const mean = data.reduce((s, n) => s + n) / data.length;
-            const variance = data.reduce((s, n) => s + (n - mean) ** 2, 0) / (data.length - 1);
-            return variance;
+            n = data.length;
+            if (n % 2 == 1) {
+              return data.sort()[(n-1)/2];
+            } else {
+              return (data.sort()[n/2] + data.sort()[n/2 -1])/2;
+            }
           }
         },
       ],
-      mixqs: [
-        {
-          "question": "Vilket påstående beskriver det vi kallar för Bias?",
-          "answerFormat": "$ans1A avvikelse från $ans1B",
-          "variables": [
-            {
-              "id": "$ans1A",
-              "correct": [
-                "Systematisk"
-              ],
-              "wrong": [
-                "Slumpmässig"
-              ]
-            },
-            {
-              "id": "$ans1B",
-              "correct": [
-                "från referens material mätt med referensmetod",
-                "det rätta värdet"
-              ],
-              "wrong": [
-                "från tillverkarens kvalitetskontroll",
-                "median",
-                "medelvärdet",
-                "från tillverkarens kalibrator"
-              ]
-            }
-          ]
-        },
-        {
-          "question": "Vilket påstående beskriver det vi kallar för Limit of Quantification (LoQ)?",
-          "answerFormat": "Den $ans1A av $ans1B där metoden ger ett CV under $ans1C",
-          "variables": [
-            {
-              "id": "$ans1A",
-              "correct": [
-                "lägsta nivå",
-                "lägsta koncentration"
-              ],
-              "wrong": [
-                "högsta nivå",
-                "koncentrationsavvikelse",
-                "medel koncentration",
-                "median nivå",
-                "median koncentration",
-                "högsta koncentration"
-              ]
-            },
-            {
-              "id": "$ans1B",
-              "correct": [
-                "analyten",
-                "det man mäter"
-              ],
-              "wrong": [
-                "variation"
-              ]
-            },
-            {
-              "id": "$ans1C",
-              "correct": [
-                0.2,
-                "tjugo procent"
-              ],
-              "wrong": [
-                0.1,
-                0.4,
-                0.5,
-                1,
-                "som är större än medelvärdet",
-                "som är mindre än metodens median",
-                "som är mindre än medelvärdet"
-              ]
-            }
-          ]
-        },
-        {
-          "question": "Vilket påstående beskriver skillnaden mellan referensintervall och handlingsgränser.",
-          "answerFormat": "Referensintervall visar $ans1A  som är vanligt bland $ans1B. Handlingsgräns är $ans1C som på ett optimalt sätt $ans1D $ans1E och sjuka.",
-          "variables": [
-            {
-              "id": "$ans1A",
-              "correct": [
-                "inom vilka gränser ",
-                "vilket spann av mätvärden",
-                "vilka mätvärden"
-              ],
-              "wrong": [
-                "vilka medelvärden",
-                "vilka avvikande värden",
-                "vilka medianer",
-                "vilka skillnader i mätvärden"
-              ]
-            },
-            {
-              "id": "$ans1B",
-              "correct": [
-                "de utan uppenbar sjukdom",
-                "uppenbart friska",
-                "friska",
-                "de som verkar vara friska"
-              ],
-              "wrong": [
-                "sjuka",
-                "som är unga och friska",
-                "som saknar alla sjukdomar som vi känner till",
-                "som inte står på någon medicin",
-                "som kan ha sjukdom"
-              ]
-            },
-            {
-              "id": "$ans1C",
-              "correct": [
-                "en nivå av en analyt",
-                "en gräns",
-                "ett mätvärde",
-                "en nivå av en biomarkör"
-              ],
-              "wrong": [
-                "ett spridingsmått",
-                "en median",
-                "ett medelvärde",
-                "2 standardavvikelser över medlevärdet",
-                "den 97.5:e percentil"
-              ]
-            },
-            {
-              "id": "$ans1D",
-              "correct": [
-                "sperarerar",
-                "särskiljer"
-              ],
-              "wrong": [
-                "införlivar",
-                "kombinerar",
-                "sammanför",
-                "förenar",
-                "visar vad som är gemensamt för"
-              ]
-            },
-            {
-              "id": "$ans1E",
-              "correct": [
-                "de utan sjukdom",
-                "friska"
-              ],
-              "wrong": [
-                "de som överlerer",
-                "de med mild sjukdom",
-                "de som kanske är friska"
-              ]
-            }
-          ]
-        },
-        {
-          "question": "Vilket påstående beskriver en referenspopulation?",
-          "answerFormat": "Ett helst $ans1A  av $ans1B som verkar $ans1C som påverkar den $ans1D man vill skapa referensintervall för",
-          "variables": [
-            {
-              "id": "$ans1A",
-              "correct": [
-                "randomiserat urval",
-                "konsekutiv sampling",
-                "slumpat urval"
-              ],
-              "wrong": [
-                "urval med mest män",
-                "sållat urval",
-                "selekterat urval",
-                "sovrat urval",
-                "urval av enbart ungre",
-                "särskiljt urval",
-                "selekterat könsseleketrat urval"
-              ]
-            },
-            {
-              "id": "$ans1B",
-              "correct": [
-                "individer",
-                "personer"
-              ],
-              "wrong": [
-                "sjuka",
-                "män",
-                "patienter",
-                "kvinnor",
-                "äldre"
-              ]
-            },
-            {
-              "id": "$ans1C",
-              "correct": [
-                "vara friska",
-                "inte ha tillsånd",
-                "sakna tillstånd"
-              ],
-              "wrong": [
-                "ha tillstånd",
-                "innefatta tillstånd",
-                "ha sjukdom",
-                "drabbade av tillstånd"
-              ]
-            },
-            {
-              "id": "$ans1D",
-              "correct": [
-                "analyt",
-                "mesurand",
-                "mätvärde",
-                "biomarkör"
-              ],
-              "wrong": [
-                "Standardavvikelse",
-                "diagnos",
-                "medicinska process",
-                "medicinsk ansvarsområde",
-                "sjukdom",
-                "medelvärde",
-                "konfidensintervall"
-              ]
-            }
-          ]
-        },
-        {
-          "question": "Vilket påstående beskriver standardavvikelse (SD) i ett slumpat urval?",
-          "answerFormat": "$ans1A av  datas $ans1B avstånd från  $ans1C delat med $ans1D",
-          "variables": [
-            {
-              "id": "$ans1A",
-              "correct": [
-                "Plussar ihop",
-                "Summan",
-                "Addition"
-              ],
-              "wrong": [
-                "Subtraktion",
-                "Medelväde",
-                "Kvadrering",
-                "Median",
-                "Faktorering"
-              ]
-            },
-            {
-              "id": "$ans1B",
-              "correct": [
-                "upphöjt i två",
-                "kvadrerade"
-              ],
-              "wrong": [
-                "subtraherade",
-                "normerade",
-                "summerade",
-                "medelvädesnormerade",
-                "upphöjt i tre",
-                "logaritmerade",
-                "faktorerade",
-                "upphöjt i fyra"
-              ]
-            },
-            {
-              "id": "$ans1C",
-              "correct": [
-                "summan av alla data delat med antal data",
-                "medelvärde"
-              ],
-              "wrong": [
-                "median",
-                "maxvärde",
-                "minsta värde",
-                "90% konfidensintervall",
-                "95% konfidensintervall"
-              ]
-            },
-            {
-              "id": "$ans1D",
-              "correct": [
-                "datas antal minus 1",
-                "antalet data minus 1",
-                "datas antal minus ett",
-                "antalet data minus ett",
-                "datas antal minus ett tal som påverkas av antalet frihesgader"
-              ],
-              "wrong": [
-                "summan av all data",
-                "antalet data minus datas medelvärde",
-                "medelvärdet av alla data minus ett",
-                "medelvärdet av alla data ",
-                "antalet data minus 3",
-                "antalet data minus två",
-                "antalet data multiplicerat med 1.5",
-                "antalet data plus ett",
-                "antalet jämna data"
-              ]
-            }
-          ]
-        }
-      ]
+      mixqs: mixqs
     };
   },
   methods: {
@@ -390,6 +97,7 @@ const app = Vue.createApp({
         this.questions.push(q);
       });
       this.questions = this.shuffle(this.questions);     
+      this.count = this.questions.length;
     },
 
     shuffle(array) {
