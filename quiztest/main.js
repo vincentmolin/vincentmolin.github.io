@@ -48,10 +48,12 @@ const app = Vue.createApp({
           },
           correctAnswer: (data) => {
             n = data.length;
+            copy = data.slice();
+            sorted = copy.sort((a,b) => a - b);
             if (n % 2 == 1) {
-              return data.sort()[(n-1)/2];
+              return sorted[(n-1)/2];
             } else {
-              return (data.sort()[n/2] + data.sort()[n/2 -1])/2;
+              return (sorted[n/2] + sorted[n/2 -1])/2;
             }
           }
         },
