@@ -389,7 +389,21 @@ const app = Vue.createApp({
         q = this.createMixQQuestion(mixq);
         this.questions.push(q);
       });
-      this.questions = this.questions.sort((a, b) => 0.5 - Math.random());      
+      this.questions = this.shuffle(this.questions);     
+    },
+
+    shuffle(array) {
+      let currentIndex = array.length,  randomIndex;
+      // While there remain elements to shuffle.
+      while (currentIndex != 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+      return array;
     },
 
     createMixQQuestion(mixq) {
